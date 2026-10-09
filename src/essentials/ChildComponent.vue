@@ -20,8 +20,19 @@ const bookObject = reactive({
   publishedAt: '2016-04-10'
 })
 
+const str = ref('')
+function addChar(dollarEvent: Event,) {
+  console.log({ dollarEvent })
+  str.value += "yo"
+}
+
 const numbers = ref([1, 2, 3, 4, 5, 6])
 const evenNums = computed(() => numbers.value.filter(n => n % 2 === 0))
+
+const inputText = ref('')
+const checked = ref(false)
+const radiod = ref('')
+const selected = ref('')
 </script>
 
 <template>
@@ -52,6 +63,33 @@ const evenNums = computed(() => numbers.value.filter(n => n % 2 === 0))
       <ul>
         <li v-for="num in evenNums" :key="num">{{ num }}</li>
       </ul>
+    </div>
+    <div>
+      <button @click="addChar($event)">add: {{ str }}</button>
+    </div>
+  </div>
+  <div>
+    <input v-bind:value="inputText" v-on:input="event => inputText = (event.target as any)?.value!"
+      placeholder="not cool" />
+    <input v-model="inputText" placeholder="cool" />
+    <span>{{ inputText }}</span>
+    <input id="box" type="checkbox" v-model="checked" />
+    <label for="box">{{ checked }}</label>
+    <div>
+      <p>Picked: {{ radiod }}</p>
+      <input type="radio" id="r1" value="val1" v-model="radiod" />
+      <label for="r1">val1</label>
+      <input type="radio" id="r2" value="val2" v-model="radiod" />
+      <label for="r2">val2</label>
+    </div>
+    <div>
+      <p>selected: {{ selected }}</p>
+      <select v-model="selected" multiple>
+        <option disabled value="">select some</option>
+        <option>o1</option>
+        <option>o2</option>
+        <option>o3</option>
+      </select>
     </div>
   </div>
 </template>
