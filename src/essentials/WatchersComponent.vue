@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onWatcherCleanup, ref, watch, watchEffect } from 'vue';
+import { onWatcherCleanup, ref, watch, watchEffect } from 'vue'
 
 const question = ref('')
 const answer = ref('add "?"')
@@ -33,12 +33,15 @@ watch(question, async (newQuestion, oldQuestion, onCleanup) => {
     }
   }
 
-  onCleanup(() => { })
+  onCleanup(() => {})
 })
 
-watch(() => x.value + y.value, (sum) => {
-  console.log(`sum is ${sum}`)
-})
+watch(
+  () => x.value + y.value,
+  (sum) => {
+    console.log(`sum is ${sum}`)
+  },
+)
 
 const stopWatch = watchEffect(async () => {
   const controller = new AbortController()
@@ -56,7 +59,8 @@ stopWatch()
 
 <template>
   <div>
-    <p>ask for yes/no
+    <p>
+      ask for yes/no
       <span v-show="loading">loading...</span>
     </p>
     <input v-model="question" :disabled="loading" />

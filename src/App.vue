@@ -1,6 +1,4 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="layout">
@@ -14,9 +12,7 @@
     <main class="main">
       <RouterView />
     </main>
-    <footer class="footer">
-      Footer
-    </footer>
+    <footer class="footer">Footer</footer>
   </div>
 </template>
 
@@ -33,7 +29,7 @@
 }
 
 .header {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .nav {
@@ -52,17 +48,17 @@
 }
 
 .nav a:hover {
-  background: #f2f2f2;
+  background: var(--color-background-soft);
 }
 
 /* класс, который RouterLink сам вешает на ссылку текущей страницы */
 .nav a.router-link-active {
-  background: #e8e8e8;
+  background: var(--color-background-mute);
   font-weight: 600;
 }
 
 .footer {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--color-border);
   padding: 16px;
   text-align: center;
   font-size: 0.85em;

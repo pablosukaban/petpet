@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue'
 
 const styleObj = reactive({
   color: 'red',
-  fontSize: '20px'
+  fontSize: '20px',
 })
 
 const newStyle = reactive({
-  fontWeight: 900
+  fontWeight: 900,
 })
 
 const isCool = ref(false)
@@ -17,17 +17,17 @@ const items = ref([{ message: 'Foo' }, { message: 'Bar' }])
 const bookObject = reactive({
   title: 'How to do lists in Vue',
   author: 'Jane Doe',
-  publishedAt: '2016-04-10'
+  publishedAt: '2016-04-10',
 })
 
 const str = ref('')
-function addChar(dollarEvent: Event,) {
+function addChar(dollarEvent: Event) {
   console.log({ dollarEvent })
-  str.value += "yo"
+  str.value += 'yo'
 }
 
 const numbers = ref([1, 2, 3, 4, 5, 6])
-const evenNums = computed(() => numbers.value.filter(n => n % 2 === 0))
+const evenNums = computed(() => numbers.value.filter((n) => n % 2 === 0))
 
 const inputText = ref('')
 const checked = ref(false)
@@ -49,11 +49,15 @@ const selected = ref('')
     <p v-show="isCool">showing cool</p>
     <div>
       <ul>
-        <li v-for="({ message }, index) of items" :key="message"> damn - {{ index }} {{ message }}</li>
+        <li v-for="({ message }, index) of items" :key="message">
+          damn - {{ index }} {{ message }}
+        </li>
       </ul>
       book:
       <ul>
-        <li v-for="(value, key, index) in bookObject" :key="value">{{ index + 1 }}. {{ key }}: {{ value }}</li>
+        <li v-for="(value, key, index) in bookObject" :key="value">
+          {{ index + 1 }}. {{ key }}: {{ value }}
+        </li>
       </ul>
       range:
       <ul>
@@ -69,8 +73,11 @@ const selected = ref('')
     </div>
   </div>
   <div>
-    <input v-bind:value="inputText" v-on:input="event => inputText = (event.target as any)?.value!"
-      placeholder="not cool" />
+    <input
+      v-bind:value="inputText"
+      v-on:input="(event) => (inputText = (event.target as any)?.value!)"
+      placeholder="not cool"
+    />
     <input v-model="inputText" placeholder="cool" />
     <span>{{ inputText }}</span>
     <input id="box" type="checkbox" v-model="checked" />

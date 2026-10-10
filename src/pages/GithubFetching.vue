@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue'
 
 type Commit = {
   author: {
-    name: string,
+    name: string
     email: string
     date: string
-  },
-  id: string,
-  message: string,
-  url: string,
+  }
+  id: string
+  message: string
+  url: string
 }
 
 const API_URL = `https://api.github.com/repos/vuejs/core/commits?per_page=3&sha=`
@@ -25,7 +25,10 @@ watchEffect(async () => {
   try {
     const response = await fetch(API_URL + currentBranch.value)
 
-    commits.value = (await response.json()).map((item: { sha: string, commit: Commit }) => ({ ...item.commit, id: item.sha }))
+    commits.value = (await response.json()).map((item: { sha: string; commit: Commit }) => ({
+      ...item.commit,
+      id: item.sha,
+    }))
   } catch (error) {
     console.error(error)
     // err.value = error
@@ -36,9 +39,7 @@ watchEffect(async () => {
 </script>
 
 <template>
-  <h1>
-    Fetching
-  </h1>
+  <h1>Fetching</h1>
   <div>
     <template v-for="b in branches" :key="b">
       <input :id="b" type="radio" :value="b" v-model="currentBranch" />
@@ -49,7 +50,10 @@ watchEffect(async () => {
       <li v-for="c in commits" :key="c.id">
         <a :href="c.url">
           {{ c.id.slice(0, 7) }}
-        </a> - {{ c.message }} <br /> by {{ c.author.name }}, at <strong>
+        </a>
+        - {{ c.message }} <br />
+        by {{ c.author.name }}, at
+        <strong>
           {{ c.author.date }}
         </strong>
       </li>

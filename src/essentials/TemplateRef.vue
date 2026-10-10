@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, useTemplateRef } from 'vue';
+import { onMounted, useTemplateRef } from 'vue'
 
 const inpRef = useTemplateRef('inputRef')
 // const inputRef = ref(null)
