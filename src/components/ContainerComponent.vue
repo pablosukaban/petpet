@@ -21,13 +21,15 @@ onUnmounted(() => clearInterval(timer));
     <header>
       <slot name="header" />
     </header>
-    <main class="main">
-      <slot />
-    </main>
-    <aside v-if="$slots.aside" class="aside">
-      <!-- отдаём свои данные наружу: всё, что тут перечислено, прилетит в #aside="{ ... }" -->
-      <slot name="aside" :seconds="seconds" :is-open="isOpen" :toggle="toggle" />
-    </aside>
+    <div class="body">
+      <main class="main">
+        <slot />
+      </main>
+      <aside v-if="$slots.aside" class="aside">
+        <!-- отдаём свои данные наружу: всё, что тут перечислено, прилетит в #aside="{ ... }" -->
+        <slot name="aside" :seconds="seconds" :is-open="isOpen" :toggle="toggle" />
+      </aside>
+    </div>
     <footer v-if="$slots.footer" class="footer">
       <slot name="footer" />
     </footer>
@@ -43,8 +45,15 @@ onUnmounted(() => clearInterval(timer));
   min-height: 100vh;
 }
 
+/* main и aside стоят в ряд, вместе занимают всё место между шапкой и футером */
+.body {
+  display: flex;
+  flex: 1;
+}
+
 .main {
   flex: 1;
+  min-width: 0;
 }
 
 .header {
@@ -77,11 +86,9 @@ onUnmounted(() => clearInterval(timer));
 }
 
 .aside {
-  border-top: 1px dashed var(--color-border);
-  max-width: 720px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 12px 16px;
+  flex: 0 0 220px;
+  border-left: 1px dashed var(--color-border);
+  padding: 16px;
 }
 
 .footer {
