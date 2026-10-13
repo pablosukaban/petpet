@@ -1,37 +1,35 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ContainerComponent from "./components/ContainerComponent.vue";
+</script>
 
 <template>
-  <div class="layout">
-    <header class="header">
+  <ContainerComponent>
+    <template v-slot:header>
       <nav class="nav">
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/fetching">GH Fetching</RouterLink>
         <RouterLink to="/posts">Posts</RouterLink>
       </nav>
-    </header>
-    <main class="main">
+    </template>
+
+    <!-- <template #default>
       <RouterView />
-    </main>
-    <footer class="footer">Footer</footer>
-  </div>
+    </template> -->
+
+    <RouterView />
+
+    <!-- seconds, isOpen и toggle в этом файле нигде не объявлены: их даёт ContainerComponent -->
+    <template #aside="{ seconds, isOpen, toggle }">
+      <button @click="toggle">{{ isOpen ? "Скрыть" : "Показать" }}</button>
+      <p v-if="isOpen">Ты на сайте уже {{ seconds }} сек.</p>
+    </template>
+
+    <!-- <template #footer> Footer </template> -->
+
+  </ContainerComponent>
 </template>
 
 <style scoped>
-/* растягиваем на всю высоту экрана, чтобы футер был внизу даже на короткой странице */
-.layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.main {
-  flex: 1;
-}
-
-.header {
-  border-bottom: 1px solid var(--color-border);
-}
-
 .nav {
   display: flex;
   gap: 8px;
@@ -55,13 +53,5 @@
 .nav a.router-link-active {
   background: var(--color-background-mute);
   font-weight: 600;
-}
-
-.footer {
-  border-top: 1px solid var(--color-border);
-  padding: 16px;
-  text-align: center;
-  font-size: 0.85em;
-  color: #888;
 }
 </style>
