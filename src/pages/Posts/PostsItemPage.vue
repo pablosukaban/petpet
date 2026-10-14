@@ -1,108 +1,125 @@
 <script setup lang="ts">
-import type { Post } from './types'
-import { ref, watch } from 'vue'
+import { useFetch } from "@/composables/useFetch";
+import PageComponent from "@/components/PageComponent.vue";
+import type { Comment, Post } from "./types";
+import { computed, onMounted, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useUsersStore } from "./usersStore";
 
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 
-const props = defineProps<{ id: string }>()
+const props = defineProps<{ id: string }>();
 
-const post = ref<Post>()
-const isPostLoading = ref(false)
-const isPostDeleting = ref(false)
-const error = ref<string | null>(null)
+const isPostDeleting = ref(false);
 
-const router = useRouter()
+const { data: post, error: postError } = useFetch<Post>(
+  () => `https://jsonplaceholder.typicode.com/posts/${props.id}`,
+);
 
-const getUrl = (id: string) => `https://jsonplaceholder.typicode.com/posts/${id}`
+const { data: comments, error: commentsError } = useFetch<Array<Comment>>(
+  () => `https://jsonplaceholder.typicode.com/comments?postId=${props.id}`,
+);
 
-const loadPost = async (id: string) => {
-  isPostLoading.value = true
-  error.value = null
-  post.value = undefined
+const usersStore = useUsersStore();
+const { getUserById } = storeToRefs(usersStore);
+const author = computed(() => (post.value ? getUserById.value(post.value.userId) : undefined));
 
-  try {
-    const response = await fetch(getUrl(id))
-    if (!response.ok) {
-      throw new Error(response.status === 404 ? 'Пост не найден' : `HTTP ${response.status}`)
-    }
-    post.value = await response.json()
-  } catch (e) {
-    error.value = e instanceof Error ? e.message : String(e)
-  } finally {
-    isPostLoading.value = false
-  }
-}
+onMounted(() => usersStore.fetchUsers());
+
+const router = useRouter();
+
+const getPostUrl = (id: string) => `https://jsonplaceholder.typicode.com/posts/${id}`;
 
 const deletePost = async (id: string): Promise<boolean> => {
-  isPostDeleting.value = true
+  isPostDeleting.value = true;
 
   try {
-    const response = await fetch(getUrl(id), {
-      method: 'DELETE',
-    })
+    const response = await fetch(getPostUrl(id), {
+      method: "DELETE",
+    });
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`)
+      throw new Error(`HTTP ${response.status}`);
     }
 
-    return true
+    return true;
   } catch (e) {
-    error.value = e instanceof Error ? e.message : String(e)
-    return false
+    console.error(e);
+    return false;
   } finally {
-    isPostDeleting.value = false
+    isPostDeleting.value = false;
   }
-}
+};
 
 const handleRemove = async () => {
-  const isSure = confirm('u sure?')
+  const isSure = confirm("u sure?");
 
   if (!isSure || !post.value) {
-    return
+    return;
   }
 
-  const isDeleted = await deletePost(String(post.value.id))
+  const isDeleted = await deletePost(String(post.value.id));
 
   if (isDeleted) {
-    router.push({ name: 'posts' })
+    router.push({ name: "posts" });
   }
-}
-
-watch(
-  () => props.id,
-  (id) => {
-    loadPost(id)
-  },
-  { immediate: true },
-)
+};
 </script>
 
 <template>
-  <div class="page">
-    <RouterLink to="/posts" class="back">← Все посты</RouterLink>
+  <PageComponent>
+    <RouterLink :to="{ name: 'posts' }" class="back">← Все посты</RouterLink>
 
-    <p v-if="isPostLoading" class="loading">Loading...</p>
-    <div v-else-if="error" class="error">
-      <p>Ошибочка: {{ error }}</p>
-      <button @click="loadPost(props.id)">Попробовать снова</button>
+    <div v-if="postError" class="error">
+      <p>Ошибочка: {{ postError }}</p>
     </div>
     <article v-else-if="post" class="post">
-      <div>
+      <header class="postHeader">
         <h1 class="title">{{ post.title }}</h1>
-        <button @click="handleRemove" :disabled="isPostDeleting">X</button>
-      </div>
+        <button
+          class="remove"
+          @click="handleRemove"
+          :disabled="isPostDeleting"
+          title="Удалить пост"
+        >
+          {{ isPostDeleting ? "…" : "✕" }}
+        </button>
+      </header>
       <p class="body">{{ post.body }}</p>
-      <p class="author">Author: {{ post.userId }}</p>
+      <p class="author">
+        Author:
+        <RouterLink v-if="author" :to="{ name: 'user', params: { id: author.id } }">
+          {{ author.name }}
+        </RouterLink>
+        <span v-else>#{{ post.userId }}</span>
+      </p>
     </article>
-  </div>
+    <p v-else class="loading">Loading...</p>
+
+    <section class="comments">
+      <h2 class="commentsTitle">
+        Комментарии
+        <span v-if="comments" class="count">{{ comments.length }}</span>
+      </h2>
+
+      <div v-if="commentsError" class="error">
+        <p>Ошибочка: {{ commentsError }}</p>
+      </div>
+      <p v-else-if="!comments" class="loading">Loading...</p>
+      <p v-else-if="!comments.length" class="loading">Комментариев пока нет</p>
+      <ul v-else class="commentList">
+        <li v-for="comment in comments" :key="comment.id" class="comment">
+          <div class="commentHeader">
+            <span class="commentName">{{ comment.name }}</span>
+            <a class="commentEmail" :href="`mailto:${comment.email}`">{{ comment.email }}</a>
+          </div>
+          <p class="commentBody">{{ comment.body }}</p>
+        </li>
+      </ul>
+    </section>
+  </PageComponent>
 </template>
 
 <style scoped>
-.page {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 16px;
-}
-
 .back {
   display: inline-block;
   margin-bottom: 16px;
@@ -120,36 +137,150 @@ watch(
 
 .error {
   padding: 12px 16px;
-  border: 1px solid #f0b4b4;
+  border: 1px solid rgb(240 68 56 / 0.4);
   border-radius: 8px;
-  background: #fdf0f0;
-  color: #b42318;
+  background: rgb(240 68 56 / 0.08);
+  color: #e5484d;
 }
 
 .error p {
-  margin: 0 0 8px;
+  margin: 0;
 }
 
 .post {
-  padding: 16px 20px;
+  padding: 20px 24px;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 12px;
+  background: var(--color-background-soft);
+}
+
+.postHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
 }
 
 .title {
-  margin: 0 0 12px;
+  margin: 0;
   font-size: 1.5em;
   font-weight: 600;
+  line-height: 1.25;
+  color: var(--color-heading);
+}
+
+.title::first-letter {
+  text-transform: uppercase;
+}
+
+.remove {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+}
+
+.remove:hover:not(:disabled) {
+  border-color: rgb(240 68 56 / 0.5);
+  color: #e5484d;
+}
+
+.remove:disabled {
+  cursor: wait;
+  opacity: 0.6;
 }
 
 .body {
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.6;
+  white-space: pre-line;
 }
 
 .author {
   margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
   font-size: 0.85em;
   color: #888;
+}
+
+.author a {
+  color: inherit;
+  font-weight: 600;
+}
+
+.comments {
+  margin-top: 32px;
+}
+
+.commentsTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: var(--color-heading);
+}
+
+.count {
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--color-background-mute);
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+.commentList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.comment {
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.commentHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin-bottom: 6px;
+}
+
+.commentName {
+  font-weight: 600;
+}
+
+.commentName::first-letter {
+  text-transform: uppercase;
+}
+
+.commentEmail {
+  font-size: 0.8em;
+  color: #888;
+  text-decoration: none;
+}
+
+.commentEmail:hover {
+  text-decoration: underline;
+}
+
+.commentBody {
+  margin: 0;
+  line-height: 1.5;
+  white-space: pre-line;
 }
 </style>

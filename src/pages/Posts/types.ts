@@ -24,3 +24,11 @@ export type User = {
     bs: string;
   };
 };
+
+export type Comment = {
+  postId: number;
+  id: number;
+  name: string;
+  email: string;
+  body: string;
+};
