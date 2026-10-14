@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { debounce } from "@/utils";
-import { ref, watch, onUnmounted, useTemplateRef } from "vue";
+import { ref, watch, onUnmounted, useTemplateRef, computed } from "vue";
 import type { Post } from "../types";
 import AddPostDialog from "./AddPostDialog.vue";
 
@@ -13,6 +13,8 @@ const postsUrl = "https://jsonplaceholder.typicode.com/posts?";
 
 const posts = ref<Array<Post>>([]);
 const isPostsLoading = ref(false);
+
+const totalPostsCount = computed(() => posts.value.length);
 
 const addModalRef = useTemplateRef("add-dialog");
 
@@ -70,12 +72,13 @@ onUnmounted(() => loadPosts.cancel());
 <template>
   <AddPostDialog @addPost="addPost" />
   <p v-if="isPostsLoading" class="loading">Loading...</p>
-  <div class="list" v-else-if="posts.length > 0">
+  <div class="list" v-else-if="totalPostsCount > 0">
+    <p>Posts: {{ totalPostsCount }}</p>
     <div v-for="post in posts" :key="post.id">
       <slot name="post" :post :remove="removePost" />
     </div>
   </div>
-  <p v-else-if="!isPostsLoading && posts.length === 0">Ошибочка</p>
+  <p v-else-if="!isPostsLoading && totalPostsCount === 0">Ошибочка</p>
 </template>
 
 <style lang="css" scoped>

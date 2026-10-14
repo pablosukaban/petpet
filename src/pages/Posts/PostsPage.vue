@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref, useTemplateRef } from "vue";
+import { onMounted, ref } from "vue";
 import PostsListItemComponent from "./components/PostsListItemComponent.vue";
-import type { Post, User } from "./types.js";
+import type { User } from "./types.js";
 import PostsList from "./components/PostsList.vue";
-import AddPostDialog from "./components/AddPostDialog.vue";
 
 const usersUrl = "https://jsonplaceholder.typicode.com/users";
 
