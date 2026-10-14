@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ref, watchEffect } from "vue";
+import PageComponent from "@/components/PageComponent.vue";
+import { useFetch } from "@/composables/useFetch";
+import { computed, ref } from "vue";
 
 type Commit = {
   author: {
@@ -16,38 +18,28 @@ const API_URL = `https://api.github.com/repos/vuejs/core/commits?per_page=3&sha=
 const branches = ["main", "minor"];
 const currentBranch = ref(branches[0]);
 
-const commits = ref<Array<Commit>>([]);
+const { data, error } = useFetch<Array<{ sha: string; commit: Commit }>>(
+  () => `${API_URL}${currentBranch.value}`,
+);
 
-const isLoading = ref(false);
-
-watchEffect(async () => {
-  isLoading.value = true;
-  try {
-    const response = await fetch(API_URL + currentBranch.value);
-
-    commits.value = (await response.json()).map((item: { sha: string; commit: Commit }) => ({
-      ...item.commit,
-      id: item.sha,
-    }));
-  } catch (error) {
-    console.error(error);
-    // err.value = error
-  } finally {
-    isLoading.value = false;
-  }
+const commits = computed(() => {
+  return data.value?.map((item) => ({
+    ...item.commit,
+    id: item.sha,
+  }));
 });
 </script>
 
 <template>
-  <div class='page'>
+  <PageComponent>
     <h1>Fetching</h1>
     <div>
       <template v-for="b in branches" :key="b">
         <input :id="b" type="radio" :value="b" v-model="currentBranch" />
         <label :for="b">{{ b }}</label>
       </template>
-      <p v-if="isLoading">Loading...</p>
-      <ul v-else-if="!isLoading && commits.length > 0">
+      <p v-if="error">Error......</p>
+      <ul v-else-if="commits && commits.length > 0">
         <li v-for="c in commits" :key="c.id">
           <a :href="c.url">
             {{ c.id.slice(0, 7) }}
@@ -59,9 +51,9 @@ watchEffect(async () => {
           </strong>
         </li>
       </ul>
-      <p v-else>Error!!!!</p>
+      <p v-else>Loading...</p>
     </div>
-  </div>
+  </PageComponent>
 </template>
 
 <style lang="css" scoped>

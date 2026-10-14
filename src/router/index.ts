@@ -20,5 +20,10 @@ export const router = createRouter({
       component: () => import("../pages/Posts/PostsItemPage.vue"),
       props: true,
     },
+    {
+      path: "/composables",
+      name: "composables",
+      component: () => import("../pages/ComposablesTest.vue"),
+    },
   ],
 });

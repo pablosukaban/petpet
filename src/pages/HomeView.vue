@@ -1,7 +1,11 @@
+<script setup lang="ts">
+import PageComponent from "@/components/PageComponent.vue";
+</script>
+
 <template>
-  <div class="page">
+  <PageComponent>
     <h1>Home</h1>
-  </div>
+  </PageComponent>
 </template>
 
 <style lang="css" scoped>

@@ -9,6 +9,7 @@ import ContainerComponent from "./components/ContainerComponent.vue";
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/fetching">GH Fetching</RouterLink>
         <RouterLink to="/posts">Posts</RouterLink>
+        <RouterLink to="/composables">Composables</RouterLink>
       </nav>
     </template>
 
@@ -25,7 +26,6 @@ import ContainerComponent from "./components/ContainerComponent.vue";
     </template>
 
     <!-- <template #footer> Footer </template> -->
-
   </ContainerComponent>
 </template>
 

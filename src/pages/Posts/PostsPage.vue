@@ -1,15 +1,24 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import PostsListItemComponent from "./components/PostsListItemComponent.vue";
 import type { User } from "./types.js";
 import PostsList from "./components/PostsList.vue";
+import PageComponent from "@/components/PageComponent.vue";
+import { debounce } from "@/utils.js";
 
 const usersUrl = "https://jsonplaceholder.typicode.com/users";
 
-// const posts = ref<Array<Post>>([]);
 const users = ref<Array<User>>([]);
 const searchQ = ref("");
-const selectLimit = ref(10);
+const selectLimit = ref(20);
+const debouncedSearch = ref("");
+
+const updateSearch = debounce((value: string) => {
+  debouncedSearch.value = value
+}, 300);
+
+watch(searchQ, (search) => updateSearch(search));
+onUnmounted(() => updateSearch.cancel())
 
 const isUsersLoading = ref(false);
 
@@ -32,7 +41,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="page">
+  <PageComponent>
     <div class="pageHeader">
       <h1>Posts</h1>
       <input v-model="searchQ" placeholder="search posts" />
@@ -42,12 +51,12 @@ onMounted(() => {
         <option :value="50">50</option>
       </select>
     </div>
-    <PostsList :search-q :select-limit>
+    <PostsList :search-q='debouncedSearch' :select-limit>
       <template #post="{ post, remove }">
         <PostsListItemComponent :post :key="post.id" @remove-post="remove" />
       </template>
     </PostsList>
-  </div>
+  </PageComponent>
 </template>
 
 <style scoped>
