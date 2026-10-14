@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted, ref, type Ref } from "vue";
+import { ref, type Ref } from "vue";
 import { useEventListener } from "./useEventListener";
 
 export const useMouseCoords = (): { x: Ref<number>; y: Ref<number> } => {

@@ -25,5 +25,11 @@ export const router = createRouter({
       name: "composables",
       component: () => import("../pages/ComposablesTest.vue"),
     },
+    {
+      path: "/user/:id",
+      name: "user",
+      component: () => import("../pages/UserPage.vue"),
+      props: true,
+    },
   ],
 });

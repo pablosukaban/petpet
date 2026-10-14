@@ -1,12 +1,20 @@
 <script setup lang="ts">
-import type { Post } from '../types'
+import { storeToRefs } from "pinia";
+import { useUsersStore } from "../usersStore";
+import type { Post } from "../types";
+import { computed } from "vue";
 
-defineProps<{
-  post: Post
-}>()
+const props = defineProps<{
+  post: Post;
+}>();
 defineEmits<{
-  removePost: [id: number]
-}>()
+  removePost: [id: number];
+}>();
+
+const usersStore = useUsersStore();
+const { getUserById } = storeToRefs(usersStore);
+
+const author = computed(() => getUserById.value(props.post.userId));
 </script>
 
 <template>
@@ -20,7 +28,12 @@ defineEmits<{
       <button @click="$emit('removePost', post.id)">X</button>
     </div>
     <p class="body">{{ post.body }}</p>
-    <p class="author">Author: {{ post.userId }}</p>
+    <p class="author" v-if="author">
+      Author:
+      <RouterLink :to="{ name: 'user', params: { id: author.id } }">
+        {{ author.name }}
+      </RouterLink>
+    </p>
   </div>
 </template>
 

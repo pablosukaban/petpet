@@ -6,10 +6,10 @@ import ContainerComponent from "./components/ContainerComponent.vue";
   <ContainerComponent>
     <template v-slot:header>
       <nav class="nav">
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/fetching">GH Fetching</RouterLink>
-        <RouterLink to="/posts">Posts</RouterLink>
-        <RouterLink to="/composables">Composables</RouterLink>
+        <RouterLink :to="{ name: 'home' }">Home</RouterLink>
+        <RouterLink :to="{ name: 'fetching' }">GH Fetching</RouterLink>
+        <RouterLink :to="{ name: 'posts' }">Posts</RouterLink>
+        <RouterLink :to="{ name: 'composables' }">Composables</RouterLink>
       </nav>
     </template>
 

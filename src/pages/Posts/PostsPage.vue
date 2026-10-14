@@ -1,43 +1,24 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import PostsListItemComponent from "./components/PostsListItemComponent.vue";
-import type { User } from "./types.js";
 import PostsList from "./components/PostsList.vue";
 import PageComponent from "@/components/PageComponent.vue";
 import { debounce } from "@/utils.js";
+import { useUsersStore } from "./usersStore";
 
-const usersUrl = "https://jsonplaceholder.typicode.com/users";
+const usersStore = useUsersStore();
 
-const users = ref<Array<User>>([]);
 const searchQ = ref("");
 const selectLimit = ref(20);
 const debouncedSearch = ref("");
 
 const updateSearch = debounce((value: string) => {
-  debouncedSearch.value = value
+  debouncedSearch.value = value;
 }, 300);
 
 watch(searchQ, (search) => updateSearch(search));
-onUnmounted(() => updateSearch.cancel())
-
-const isUsersLoading = ref(false);
-
-const loadUsers = async () => {
-  isUsersLoading.value = true;
-
-  try {
-    const response = await fetch(usersUrl);
-    users.value = await response.json();
-  } catch (error) {
-    console.error(error);
-  } finally {
-    isUsersLoading.value = false;
-  }
-};
-
-onMounted(() => {
-  loadUsers();
-});
+onMounted(() => usersStore.fetchUsers());
+onUnmounted(() => updateSearch.cancel());
 </script>
 
 <template>
@@ -51,7 +32,7 @@ onMounted(() => {
         <option :value="50">50</option>
       </select>
     </div>
-    <PostsList :search-q='debouncedSearch' :select-limit>
+    <PostsList :search-q="debouncedSearch" :select-limit>
       <template #post="{ post, remove }">
         <PostsListItemComponent :post :key="post.id" @remove-post="remove" />
       </template>

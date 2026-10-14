@@ -3,7 +3,6 @@ import { useTemplateRef, computed } from "vue";
 import type { Post } from "../types";
 import AddPostDialog from "./AddPostDialog.vue";
 import { useFetch } from "@/composables/useFetch";
-import { debounce } from "@/utils";
 
 const { searchQ, selectLimit = 10 } = defineProps<{
   selectLimit: number;
