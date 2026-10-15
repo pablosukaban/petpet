@@ -87,7 +87,7 @@ const handleRemove = async () => {
       <p class="body">{{ post.body }}</p>
       <p class="author">
         Author:
-        <RouterLink v-if="author" :to="{ name: 'user', params: { id: author.id } }">
+        <RouterLink v-if="author" :to="{ name: 'userInfo', params: { id: author.id } }">
           {{ author.name }}
         </RouterLink>
         <span v-else>#{{ post.userId }}</span>

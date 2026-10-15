@@ -11,11 +11,20 @@ export type RouteNamedMap = {
     Record<never, never>,
     Record<never, never>
   >;
-  user: RouteRecordInfo<"user", "/user/:id", { id: string | number }, { id: string }>;
+  userInfo: RouteRecordInfo<"userInfo", "/user/:id", { id: string | number }, { id: string }>;
+  userPosts: RouteRecordInfo<
+    "userPosts",
+    "/user/:id/posts",
+    { id: string | number },
+    { id: string }
+  >;
 };
 
 declare module "vue-router" {
   interface TypesConfig {
     RouteNamedMap: RouteNamedMap;
+  }
+  interface RouteMeta {
+    title?: string | ((to: RouteLocationNormalized) => string);
   }
 }

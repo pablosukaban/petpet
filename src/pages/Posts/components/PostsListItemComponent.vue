@@ -30,7 +30,7 @@ const author = computed(() => getUserById.value(props.post.userId));
     <p class="body">{{ post.body }}</p>
     <p class="author" v-if="author">
       Author:
-      <RouterLink :to="{ name: 'user', params: { id: author.id } }">
+      <RouterLink :to="{ name: 'userInfo', params: { id: author.id } }">
         {{ author.name }}
       </RouterLink>
     </p>
