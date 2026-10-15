@@ -32,3 +32,14 @@ export type Comment = {
   email: string;
   body: string;
 };
+
+export type Commit = {
+  author: {
+    name: string;
+    email: string;
+    date: string;
+  };
+  id: string;
+  message: string;
+  url: string;
+};

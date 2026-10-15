@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useFetch } from "@/composables/useFetch";
 import { computed } from "vue";
-import type { Post } from "../Posts/types";
+import type { Post } from "../../types";
 
 const props = defineProps<{ id: string }>();
 

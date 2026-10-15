@@ -1,38 +1,38 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref } from "vue";
 
 const styleObj = reactive({
-  color: 'red',
-  fontSize: '20px',
-})
+  color: "red",
+  fontSize: "20px",
+});
 
 const newStyle = reactive({
   fontWeight: 900,
-})
+});
 
-const isCool = ref(false)
+const isCool = ref(false);
 
-const items = ref([{ message: 'Foo' }, { message: 'Bar' }])
+const items = ref([{ message: "Foo" }, { message: "Bar" }]);
 
 const bookObject = reactive({
-  title: 'How to do lists in Vue',
-  author: 'Jane Doe',
-  publishedAt: '2016-04-10',
-})
+  title: "How to do lists in Vue",
+  author: "Jane Doe",
+  publishedAt: "2016-04-10",
+});
 
-const str = ref('')
+const str = ref("");
 function addChar(dollarEvent: Event) {
-  console.log({ dollarEvent })
-  str.value += 'yo'
+  console.log({ dollarEvent });
+  str.value += "yo";
 }
 
-const numbers = ref([1, 2, 3, 4, 5, 6])
-const evenNums = computed(() => numbers.value.filter((n) => n % 2 === 0))
+const numbers = ref([1, 2, 3, 4, 5, 6]);
+const evenNums = computed(() => numbers.value.filter((n) => n % 2 === 0));
 
-const inputText = ref('')
-const checked = ref(false)
-const radiod = ref('')
-const selected = ref('')
+const inputText = ref("");
+const checked = ref(false);
+const radiod = ref("");
+const selected = ref("");
 </script>
 
 <template>

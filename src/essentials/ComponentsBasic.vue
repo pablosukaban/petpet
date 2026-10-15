@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
-import BlogPost from './BlogPost.vue'
+import { ref, watchEffect } from "vue";
+import BlogPost from "./BlogPost.vue";
 
-const link = 'https://jsonplaceholder.typicode.com/posts'
-const posts = ref(null)
-const postFontSize = ref(1)
+const link = "https://jsonplaceholder.typicode.com/posts";
+const posts = ref(null);
+const postFontSize = ref(1);
 
 watchEffect(async () => {
-  const response = await fetch(link)
-  posts.value = await response.json()
-})
+  const response = await fetch(link);
+  posts.value = await response.json();
+});
 </script>
 
 <template>

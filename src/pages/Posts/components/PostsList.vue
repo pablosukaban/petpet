@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useTemplateRef, computed } from "vue";
-import type { Post } from "../types";
+import type { Post } from "../../../types";
 import AddPostDialog from "./AddPostDialog.vue";
 import { useFetch } from "@/composables/useFetch";
 
@@ -58,7 +58,7 @@ const removePost = (id: number) => {
       <slot name="post" :post :remove="removePost" />
     </div>
   </div>
-  <p v-else-if='totalPostsCount === 0 && !error'>no posts(</p>
+  <p v-else-if="totalPostsCount === 0 && !error">no posts(</p>
   <p v-else class="loading">Loading...</p>
 </template>
 

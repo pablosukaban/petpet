@@ -1,18 +1,8 @@
 <script setup lang="ts">
 import PageComponent from "@/components/PageComponent.vue";
 import { useFetch } from "@/composables/useFetch";
+import type { Commit } from "@/types";
 import { computed, ref } from "vue";
-
-type Commit = {
-  author: {
-    name: string;
-    email: string;
-    date: string;
-  };
-  id: string;
-  message: string;
-  url: string;
-};
 
 const API_URL = `https://api.github.com/repos/vuejs/core/commits?per_page=3&sha=`;
 const branches = ["main", "minor"];

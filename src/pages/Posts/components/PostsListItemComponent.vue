@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useUsersStore } from "../usersStore";
-import type { Post } from "../types";
+import type { Post } from "../../../types";
 import { computed } from "vue";
 
 const props = defineProps<{

@@ -26,7 +26,7 @@ const initials = computed(() =>
     <header class="header">
       <div class="avatar" aria-hidden="true">{{ initials }}</div>
       <div>
-         <!-- <h2 class="name">{{ author.name }}</h2>  -->
+        <!-- <h2 class="name">{{ author.name }}</h2>  -->
         <p class="username">@{{ author.username }}</p>
       </div>
     </header>

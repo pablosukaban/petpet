@@ -1,8 +1,8 @@
 <script setup lang="ts">
-defineProps<{ title: string }>()
+defineProps<{ title: string }>();
 defineEmits<{
-  'enlarge-text': []
-}>()
+  "enlarge-text": [];
+}>();
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useFetch } from "@/composables/useFetch";
 import PageComponent from "@/components/PageComponent.vue";
-import type { Comment, Post } from "./types";
+import type { Comment, Post } from "../../types";
 import { computed, onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useUsersStore } from "./usersStore";
