@@ -18,6 +18,7 @@ export type RouteNamedMap = {
     { id: string | number },
     { id: string }
   >;
+  login: RouteRecordInfo<"login", "/login", Record<never, never>, Record<never, never>>;
 };
 
 declare module "vue-router" {
@@ -26,5 +27,6 @@ declare module "vue-router" {
   }
   interface RouteMeta {
     title?: string | ((to: RouteLocationNormalized) => string);
+    requiresAuth?: boolean;
   }
 }

@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/authStore";
 import { createRouter, createWebHistory } from "vue-router";
 
 export const router = createRouter({
@@ -66,6 +67,7 @@ export const router = createRouter({
             return "User";
           }
         },
+        requiresAuth: true,
       },
       children: [
         {
@@ -82,7 +84,21 @@ export const router = createRouter({
         },
       ],
     },
+    {
+      path: "/login",
+      name: "login",
+      component: () => import("../pages/LoginPage.vue"),
+      meta: { title: "Login" },
+    },
   ],
+});
+
+router.beforeEach((to) => {
+  const authStore = useAuthStore();
+
+  if (to.meta.requiresAuth && !authStore.isAuth) {
+    return { name: "login", query: { redirect: to.fullPath } };
+  }
 });
 
 router.afterEach((to, from, failure) => {

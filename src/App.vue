@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useAuthStore } from "./authStore";
 import ContainerComponent from "./components/ContainerComponent.vue";
+
+const authStore = useAuthStore();
 </script>
 
 <template>
@@ -10,7 +13,9 @@ import ContainerComponent from "./components/ContainerComponent.vue";
         <RouterLink :to="{ name: 'fetching' }">GH Fetching</RouterLink>
         <RouterLink :to="{ name: 'posts' }">Posts</RouterLink>
         <RouterLink :to="{ name: 'composables' }">Composables</RouterLink>
+        <RouterLink :to="{ name: 'login' }">Login</RouterLink>
       </nav>
+      <span>Hello, {{ authStore.isAuth ? "User" : "Guest" }}</span>
     </template>
 
     <!-- <template #default>
